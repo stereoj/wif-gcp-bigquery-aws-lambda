@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lambda-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install -r lambda/requirements.txt
+          pip install pytest
+      - name: Run unit tests
+        run: pytest tests/ -v
+
+  terraform-validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stack: [gcp, aws]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.0"
+      - name: terraform fmt check
+        run: terraform -chdir=terraform/${{ matrix.stack }} fmt -check -recursive
+      - name: terraform init (no backend)
+        run: terraform -chdir=terraform/${{ matrix.stack }} init -backend=false
+      - name: terraform validate
+        run: terraform -chdir=terraform/${{ matrix.stack }} validate
