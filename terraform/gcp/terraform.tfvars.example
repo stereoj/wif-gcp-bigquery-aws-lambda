@@ -1,0 +1,6 @@
+gcp_project_id      = "my-gcp-project"
+gcp_project_number  = "123456789012"
+aws_account_id      = "111122223333"
+# Precomputed and deterministic -- see the variable description.
+aws_lambda_role_arn = "arn:aws:iam::111122223333:role/gcp-bigquery-federated-query-exec-role"
+bigquery_dataset_id = "analytics"
