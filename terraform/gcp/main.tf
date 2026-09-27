@@ -41,8 +41,8 @@ resource "google_service_account" "lambda_bigquery" {
 # (NOT to touch BigQuery directly -- that grant is below, on the SA).
 resource "google_service_account_iam_member" "wif_impersonation" {
   service_account_id = google_service_account.lambda_bigquery.name
-  role                = "roles/iam.workloadIdentityUser"
-  member              = "principalSet://iam.googleapis.com/projects/${var.gcp_project_number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.aws_pool.workload_identity_pool_id}/attribute.aws_role/${var.aws_lambda_role_arn}"
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/projects/${var.gcp_project_number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.aws_pool.workload_identity_pool_id}/attribute.aws_role/${var.aws_lambda_role_arn}"
 }
 
 # Least-privilege BigQuery grant: dataset-scoped when a dataset is given,
